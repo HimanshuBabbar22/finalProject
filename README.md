@@ -4,10 +4,12 @@ It backtests a pairs trading strategy for commodities trading on MCX.
 
 The repository contains two files as described below.
 
-FinalReport.pdf:\nThis is the project report explaining the entire logic of the strategy.
-It also contains the backtesting results as well as the complete code 
-written in Python for backtesting the strategy.
+**FinalReport.pdf**
+This is the project report explaining the entire logic of the strategy.
+It also contains the backtesting results as well as the complete code written in Python for 
+backtesting the strategy.
 
-final_project.py\nThis is the python file for backtesting the strategy.
+**final_project.py**
+This file contains the Python script for backtesting the strategy.
 
 
