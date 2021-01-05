@@ -1,9 +1,8 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Sun Mar 26 01:38:56 2017
+Created on Tue Jan  5 11:32:17 2021
 
-@author: himanshu
+@author: TYNGGR
 """
 
 import quandl
@@ -77,7 +76,7 @@ def find_pairs(data, symbols):
                 days = float(len(coint.dropna()))/len(st)
                 res = np.corrcoef(df.Y, df.X)
                 if days > 0.4 and res[0,1] > 0.6:
-                    print symbols[i], symbols[j], days, res[0,1]
+                    print (symbols[i], symbols[j], days, res[0,1])
                     pairs_sym.append((symbols[i], symbols[j], days, res[0,1]))
                     pairs_df.append(df)
             except:
@@ -96,10 +95,10 @@ def get_coint(df, lookback):
     
     # Find days on which ADF test confirms stationarity
     st = pd.Series(index=df.index)
-    for key, spread in spreads.iteritems():
+    for key, spread in spreads.items():
         r = stats.adfuller(spread, maxlag=1)
         if r[1] < 0.05:
-            st.ix[key] = r
+            st.loc[key] = r
     st = st.dropna()
     
     # Out of days on which ADF test confirms stationarity,
@@ -109,7 +108,7 @@ def get_coint(df, lookback):
         loc = df.index.get_loc(i)
         r = stats.coint(df.Y.iloc[loc-lookback:loc], df.X.iloc[loc-lookback:loc])
         if r[1] < 0.05:
-            coint.ix[i] = r[1]
+            coint.loc[i] = r[1]
     coint = coint.dropna()
     # coint: contains days on which pair is co-integrated.
     # st: contains days on ADF test confirms stationarity for the pair.
@@ -283,7 +282,7 @@ def calc_performance(rets, num_of_pairs, lev=1):
     total_rets = pd.Series(index=rets.index)
     total_rets.name = 'Total Returns'
     for idx in total_rets.index:
-        total_rets.ix[idx] = np.sum(rets.ix[idx])
+        total_rets.loc[idx] = np.sum(rets.loc[idx])
     
     # Generate Equity Curve
     eq_curve = pd.Series(index=total_rets.index)
@@ -302,9 +301,9 @@ def calc_performance(rets, num_of_pairs, lev=1):
     # CAGR
     cagr = ((eq_curve.iloc[-1]/eq_curve.iloc[0])**(1.0/2)-1)*100
     # Positive Trades
-    pos_trades = [total_rets.ix[idx] for idx in total_rets.index if total_rets.ix[idx] > 0]
+    pos_trades = [total_rets.loc[idx] for idx in total_rets.index if total_rets.loc[idx] > 0]
     # Negative Trades
-    neg_trades = [total_rets.ix[idx] for idx in total_rets.index if total_rets.ix[idx] < 0]
+    neg_trades = [total_rets.loc[idx] for idx in total_rets.index if total_rets.loc[idx] < 0]
     # Number of Positive Trades
     num_profit_trades = len(pos_trades)
     # Number of Negative Trades
@@ -350,7 +349,7 @@ def calc_performance(rets, num_of_pairs, lev=1):
     df_params.index = range(1, len(df_params)+1)
     
     # Print performance parameters 
-    print df_params
+    print(df_params)
     
     # Plot Equity Curve along with maximum drawdown
     plt.plot(eq_curve.index, eq_curve, label='Equity')
@@ -401,7 +400,3 @@ eq_curve, total_rets = calc_performance(rets, len(pairs_sym), lev=10)
 #==============================================================================
 #rets = out_sample_test(pairs_sym, start_dt='2016-01-02', end_dt='2017-01-01', strategy=2)
 #eq_curve = calc_performance(rets, len(pairs_sym))
-
-
-    
-
